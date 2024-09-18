@@ -18,20 +18,6 @@ class TasksCRUDViewSet(ViewSet):
     @extend_schema(
         responses={200: TaskSerializer},
         methods=['GET'],
-        description="For getting the list of tasks",
-        tags=['Task']
-    )
-    def tasks_list(self, request):
-        tasks = Tasks.objects.filter(author_id=request.user.id)
-        if not tasks:
-            raise CustomApiException(error_code=ErrorCodes.NOT_FOUND, message="Tasks not found")
-
-        serializer = TaskSerializer(data=tasks, many=True)
-        return Response(data={'result': serializer.data, 'ok': True}, status=status.HTTP_200_OK)
-
-    @extend_schema(
-        responses={200: TaskSerializer},
-        methods=['GET'],
         description="For getting the detail of one task, pk receive the id of task",
         tags=['Task']
     )
@@ -68,7 +54,7 @@ class TasksCRUDViewSet(ViewSet):
         tags=['Task']
     )
     def update_task(self, request, pk):
-        task = Tasks.objects.filter(id=pk, author_id=request.user.id)
+        task = Tasks.objects.filter(id=pk, author_id=request.user.id).first()
         if not task:
             raise CustomApiException(error_code=ErrorCodes.NOT_FOUND, message='Task not found')
 
