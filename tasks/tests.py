@@ -1,4 +1,0 @@
-import jwt
-token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzI2NzIzODM2LCJpYXQiOjE3MjY2Mzc0MzYsImp0aSI6IjRjMDU5YjlhYzc2ZjRkYWY4YzVkMjBhM2ViMzZmOWViIiwidXNlcl9pZCI6NCwibG9naW5fdGltZSI6IjIwMjQtMDktMTggMDU6MzA6MzYifQ.Ch5cLlDpWwupNWCyxvP5HqaPeT4CZEt5X-TqIaLeEs0"
-decoded = jwt.decode(token, options={"verify_signature": False})
-print(decoded)

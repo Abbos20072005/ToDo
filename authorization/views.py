@@ -1,6 +1,4 @@
 from datetime import datetime
-from os import access
-
 from rest_framework.viewsets import ViewSet
 
 from .models import User

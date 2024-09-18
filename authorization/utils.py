@@ -1,5 +1,3 @@
-from datetime import datetime
-
 from .models import User
 from exceptions.exception import CustomApiException
 from exceptions.error_message import ErrorCodes
