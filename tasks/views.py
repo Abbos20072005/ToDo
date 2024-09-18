@@ -1,6 +1,6 @@
 from rest_framework.viewsets import ViewSet
 from .models import Tasks
-from .serializers import TaskSerializer, ParamsSerializer
+from .serializers import TaskSerializer, ParamsSerializer, CommentSerializer
 from exceptions.exception import CustomApiException
 from exceptions.error_message import ErrorCodes
 from rest_framework.response import Response
@@ -109,3 +109,26 @@ class TasksCRUDViewSet(ViewSet):
         return Response(
             data={'result': get_page(context={'request': request, 'queryset': tasks}, page=page,
                                      page_size=page_size).data, 'ok': True})
+
+    @extend_schema(
+        request=CommentSerializer,
+        responses={201: CommentSerializer},
+        methods=['POST'],
+        description="For create comment to tasks, pk receive task id",
+        tags=['Task']
+    )
+    def comment_create(self, request, pk):
+        task = Tasks.objects.filter(id=pk, author_id=request.user.id)
+        if not task:
+            raise CustomApiException(error_code=ErrorCodes.NOT_FOUND)
+
+        data = request.data
+        data['author'] = request.user.id
+        data['task'] = pk
+
+        serializer = CommentSerializer(data=data)
+        if not serializer.is_valid():
+            raise CustomApiException(error_code=ErrorCodes.VALIDATION_FAILED, message=serializer.errors)
+
+        serializer.save()
+        return Response(data={'result': serializer.data, 'ok': True}, status=status.HTTP_201_CREATED)
